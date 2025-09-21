@@ -184,6 +184,16 @@ write.csv2(RT.agg.wider, file="C:/Users/fritz/Documents/semester 3/Expra/RT_agg_
 write.csv2(ERR.agg.wider, file="C:/Users/fritz/Documents/semester 3/Expra/ERR_agg_wide.csv", row.names = F)
 
 install.packages("plotflow")
+install.packages("lsr")
+library(lsr)
+t.test(RT.agg.wider$Cong_Eff_cong80, RT.agg.wider$Cong_Eff_cong20, paired=T)
+ cohen.profile(RT.agg.wider$Cong_Eff_cong80, RT.agg.wider$Cong_Eff_cong20)
+
+ cohensD(RT.agg.wider$Cong_Eff_cong80, RT.agg.wider$Cong_Eff_cong20, method="paired" )
+ 
+t.test(ERR.agg.wider$Cong_Eff_cong80_ERR, ERR.agg.wider$Cong_Eff_cong20_ERR, paired=T)
+
+cohensD(ERR.agg.wider$Cong_Eff_cong80_ERR, ERR.agg.wider$Cong_Eff_cong20_ERR, method="paired" )
 
 
 RT_diff<-ezStats(data=RT.agg,
@@ -202,14 +212,16 @@ RT_diff$Blocktype<-factor(RT_diff$Blocktype, levels = c("lstcong20", "lstcong80"
 plot2<-ggplot(data=RT_diff, mapping = aes(y=Mean, x=Blocktype))+
   geom_bar(stat = "identity", position = "dodge", color="#404040", fill = c("#C5B2F0","#14b8ad"))+
   coord_cartesian(ylim = c(0, 50))+
-  labs(x="Blocktyp", y="RT: Inkong-kong (in ms)")+
-    theme(text=element_text(size=16))+
+  labs(x="Blocktyp", y="RT: Inkong-kong")+
+  theme(text=element_text(size=16))+
+  theme(panel.background = element_rect(fill="white", color="black"),
+        plot.background = element_rect(fill="white", color="white"))+
   geom_errorbar(aes(ymin=Mean-SE, ymax=Mean+SE), position = position_dodge(0.9), width=.2, color="#404040")
 
 plot2
 
 
-ggsave(plot=plot2, filename = "plots/ANOVA_EC.bmp")
+ggsave(plot=plot2, "RT_Grafik.png", limitsize = TRUE, width = 1572, height = 926, units= c("px"))
 
 ERR_diff<-ezStats(data=ERR.agg,
                  dv=ERR,
@@ -218,20 +230,21 @@ ERR_diff<-ezStats(data=ERR.agg,
                  within = .(Blocktype), 
                  diff=.(congruency))
 
-#ERR prozente zu Prozent zahlen
 
-ERR_diff$Mean=ERR_diff$Mean*100
-ERR_diff$SD=ERR_diff$SD*100
+
 ERR_diff$SE=ERR_diff$SD/sqrt(ERR_diff$N)
 ERR_diff$Blocktype<-factor(ERR_diff$Blocktype, levels = c("lstcong20", "lstcong80"), labels = c("80% inkongruent", "20% inkongruent"))
-
+ERR_diff$VarKoef <- ERR_diff$SD/ERR_diff$Mean
+  
 plot3<-ggplot(data=ERR_diff, mapping = aes(y=Mean, x=Blocktype))+
   geom_bar(stat = "identity", position = "dodge", color="#404040", fill = c("#C5B2F0","#14b8ad"))+
-  coord_cartesian(ylim = c(0, 10))+
-  labs(x="Blocktyp", y="ERR: Inkong-kong (in %)")+
+  coord_cartesian(ylim = c(0, 0.1))+
+  labs(x="Blocktyp", y="ERR: Inkong-kong")+
   theme(text=element_text(size=16))+
+  theme(panel.background = element_rect(fill="white", color="black"),
+        plot.background = element_rect(fill="white", color="white"))+
   geom_errorbar(aes(ymin=Mean-SE, ymax=Mean+SE), position = position_dodge(0.9), width=.2, color="#404040")
 
 plot3
 
-ggsave(plot=plot3, filename = "plots/ANOVA_ERR.bmp")
+ggsave(plot=plot3, "ERR_Grafik.png", limitsize = TRUE, width = 1572, height = 926, units= c("px"))
