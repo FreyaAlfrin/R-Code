@@ -253,3 +253,20 @@ plot3<-ggplot(data=ERR_diff, mapping = aes(y=Mean, x=Blocktype))+
 plot3
 
 ggsave(plot=plot3, "ERR_Grafik.png", limitsize = TRUE, width = 1572, height = 926, units= c("px"))
+RT_MEANS <- ezStats(data = RT.agg,
+                             wid = Subject, 
+                             dv=RT,
+                             within = .(congruency,Blocktype) )
+RT_MEANS$SE = RT_MEANS$SD/sqrt(RT_MEANS$N)
+plot4 <- ggplot(data=RT_MEANS, mapping = aes(y=Mean, x=Blocktype, fill= congruency))+
+  geom_bar(stat= "identity", position= "dodge", color="black")+
+  coord_cartesian(ylim = c(380, 480))+
+  labs(x="Blocktyp", y="Mittelwerte RT (in ms)")+
+  theme_classic()+
+  scale_fill_manual(values = c("white", "black"))+
+  theme(text = element_text(size=16))+
+  geom_errorbar(aes(ymin= Mean-SE, ymax=Mean+SE),position = position_dodge(0.9), width=.2,color="gray")
+
+plot4
+
+ggsave(plot = plot4, filename = "Interaktion.png" )
