@@ -184,18 +184,23 @@ write.csv2(RT.agg.wider, file="C:/Users/fritz/Documents/semester 3/Expra/RT_agg_
 write.csv2(ERR.agg.wider, file="C:/Users/fritz/Documents/semester 3/Expra/ERR_agg_wide.csv", row.names = F)
 
 install.packages("plotflow")
-install.packages("lsr")
+install.packages("effsize")
 library(lsr)
-t.test(RT.agg.wider$Cong_Eff_cong80, RT.agg.wider$Cong_Eff_cong20, paired=T)
- cohen.profile(RT.agg.wider$Cong_Eff_cong80, RT.agg.wider$Cong_Eff_cong20)
-
- cohensD(RT.agg.wider$Cong_Eff_cong80, RT.agg.wider$Cong_Eff_cong20, method="paired" )
+t.test(RT.agg.wider$Cong_Eff_cong20,RT.agg.wider$Cong_Eff_cong80, paired=T,alternative = "less")
  
-t.test(ERR.agg.wider$Cong_Eff_cong80_ERR, ERR.agg.wider$Cong_Eff_cong20_ERR, paired=T)
 
-cohensD(ERR.agg.wider$Cong_Eff_cong80_ERR, ERR.agg.wider$Cong_Eff_cong20_ERR, method="paired" )
+t.test(ERR.agg.wider$Cong_Eff_cong20_ERR,ERR.agg.wider$Cong_Eff_cong80_ERR, paired=T, alternative = "less")
 
 
+#cohend RT
+diffsRt <- RT.agg.wider$Cong_Eff_cong20-RT.agg.wider$Cong_Eff_cong80
+cohens_d_Rt<- mean(diffsRt)/ sd(diffsRt)
+cohens_d_Rt
+
+#cohend ERR
+diffsErr <- ERR.agg.wider$Cong_Eff_cong20_ERR- ERR.agg.wider$Cong_Eff_cong80_ERR
+cohens_d_ERR<- mean(diffsErr)/sd(diffsErr)
+cohens_d_ERR
 RT_diff<-ezStats(data=RT.agg,
                  dv=RT,
                  wid=Subject,
@@ -212,7 +217,7 @@ RT_diff$Blocktype<-factor(RT_diff$Blocktype, levels = c("lstcong20", "lstcong80"
 plot2<-ggplot(data=RT_diff, mapping = aes(y=Mean, x=Blocktype))+
   geom_bar(stat = "identity", position = "dodge", color="#404040", fill = c("#C5B2F0","#14b8ad"))+
   coord_cartesian(ylim = c(0, 50))+
-  labs(x="Blocktyp", y="RT: Inkong-kong")+
+  labs(x="Blocktyp", y="RT: inkong-kong")+
   theme(text=element_text(size=16))+
   theme(panel.background = element_rect(fill="white", color="black"),
         plot.background = element_rect(fill="white", color="white"))+
@@ -239,7 +244,7 @@ ERR_diff$VarKoef <- ERR_diff$SD/ERR_diff$Mean
 plot3<-ggplot(data=ERR_diff, mapping = aes(y=Mean, x=Blocktype))+
   geom_bar(stat = "identity", position = "dodge", color="#404040", fill = c("#C5B2F0","#14b8ad"))+
   coord_cartesian(ylim = c(0, 0.1))+
-  labs(x="Blocktyp", y="ERR: Inkong-kong")+
+  labs(x="Blocktyp", y="ER: inkong-kong")+
   theme(text=element_text(size=16))+
   theme(panel.background = element_rect(fill="white", color="black"),
         plot.background = element_rect(fill="white", color="white"))+
