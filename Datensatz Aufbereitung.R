@@ -284,11 +284,13 @@ ERR_MEANS$SE = ERR_MEANS$SD/sqrt(ERR_MEANS$N)
 ERR_MEANS$Blocktype<-factor(ERR_MEANS$Blocktype, levels = c("lstcong20", "lstcong80"), labels = c("80% inkongruent", "20% inkongruent"))
 ERR_MEANS$Kongruenz <-factor(ERR_MEANS$congruency, levels = c("cong", "incong"), labels = c("Kongr.", "Inkongr."))
 
+ERR_MEANS$Mean <-ERR_MEANS$Mean*100
+ERR_MEANS$SE <- ERR_MEANS$SE*100
 
 plot5 <- ggplot(data=ERR_MEANS, mapping = aes(y=Mean, x=Blocktype, fill= Kongruenz))+
   geom_bar(stat= "identity", position= "dodge", color="black")+
-  coord_cartesian(ylim = c(0, 0.15))+
-  labs(x="Blocktyp", y="Fehlerrate")+
+  coord_cartesian(ylim = c(0, 15))+
+  labs(x="Blocktyp", y="Mittelwerte ER (in %)")+
   theme_classic()+
   scale_fill_manual(values = c("white", "black"))+
   theme(text = element_text(size=16))+
