@@ -208,6 +208,7 @@ RT_diff<-ezStats(data=RT.agg,
                  within = .(Blocktype), 
                  diff=.(congruency))
 
+RT_diff
 RT_diff$SE=RT_diff$SD/sqrt(RT_diff$N)
 
 RT_diff$Blocktype<-factor(RT_diff$Blocktype, levels = c("lstcong20", "lstcong80"), labels = c("80% inkongruent", "20% inkongruent"))
@@ -258,7 +259,11 @@ RT_MEANS <- ezStats(data = RT.agg,
                              dv=RT,
                              within = .(congruency,Blocktype) )
 RT_MEANS$SE = RT_MEANS$SD/sqrt(RT_MEANS$N)
-plot4 <- ggplot(data=RT_MEANS, mapping = aes(y=Mean, x=Blocktype, fill= congruency))+
+RT_MEANS$Blocktype<-factor(RT_MEANS$Blocktype, levels = c("lstcong20", "lstcong80"), labels = c("80% inkongruent", "20% inkongruent"))
+RT_MEANS$Kongruenz <-factor(RT_MEANS$congruency, levels = c("cong", "incong"), labels = c("Kongr.", "Inkongr."))
+
+  
+plot4 <- ggplot(data=RT_MEANS, mapping = aes(y=Mean, x=Blocktype, fill= Kongruenz))+
   geom_bar(stat= "identity", position= "dodge", color="black")+
   coord_cartesian(ylim = c(380, 480))+
   labs(x="Blocktyp", y="Mittelwerte RT (in ms)")+
@@ -269,4 +274,27 @@ plot4 <- ggplot(data=RT_MEANS, mapping = aes(y=Mean, x=Blocktype, fill= congruen
 
 plot4
 
-ggsave(plot = plot4, filename = "Interaktion.png" )
+ggsave(plot = plot4, filename = "InteraktionRT.png" )
+
+ERR_MEANS <- ezStats(data = ERR.agg,
+                    wid = Subject, 
+                    dv=ERR,
+                    within = .(congruency,Blocktype) )
+ERR_MEANS$SE = ERR_MEANS$SD/sqrt(ERR_MEANS$N)
+ERR_MEANS$Blocktype<-factor(ERR_MEANS$Blocktype, levels = c("lstcong20", "lstcong80"), labels = c("80% inkongruent", "20% inkongruent"))
+ERR_MEANS$Kongruenz <-factor(ERR_MEANS$congruency, levels = c("cong", "incong"), labels = c("Kongr.", "Inkongr."))
+
+
+plot5 <- ggplot(data=ERR_MEANS, mapping = aes(y=Mean, x=Blocktype, fill= Kongruenz))+
+  geom_bar(stat= "identity", position= "dodge", color="black")+
+  coord_cartesian(ylim = c(0, 0.15))+
+  labs(x="Blocktyp", y="Fehlerrate")+
+  theme_classic()+
+  scale_fill_manual(values = c("white", "black"))+
+  theme(text = element_text(size=16))+
+  geom_errorbar(aes(ymin= Mean-SE, ymax=Mean+SE),position = position_dodge(0.9), width=.2,color="gray")
+
+plot5
+
+ggsave(plot = plot5, filename = "InteraktionERR.png" )
+
