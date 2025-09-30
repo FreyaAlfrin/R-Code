@@ -259,7 +259,7 @@ RT_MEANS <- ezStats(data = RT.agg,
                              dv=RT,
                              within = .(congruency,Blocktype) )
 RT_MEANS$SE = RT_MEANS$SD/sqrt(RT_MEANS$N)
-RT_MEANS$Blocktype<-factor(RT_MEANS$Blocktype, levels = c("lstcong20", "lstcong80"), labels = c("80% inkongruent", "20% inkongruent"))
+RT_MEANS$Blocktype<-factor(RT_MEANS$Blocktype, levels = c("lstcong20", "lstcong80"), labels = c("80% Konfliktanteil", "20% Konfliktanteil"))
 RT_MEANS$Kongruenz <-factor(RT_MEANS$congruency, levels = c("cong", "incong"), labels = c("Kongr.", "Inkongr."))
 
   
@@ -281,7 +281,7 @@ ERR_MEANS <- ezStats(data = ERR.agg,
                     dv=ERR,
                     within = .(congruency,Blocktype) )
 ERR_MEANS$SE = ERR_MEANS$SD/sqrt(ERR_MEANS$N)
-ERR_MEANS$Blocktype<-factor(ERR_MEANS$Blocktype, levels = c("lstcong20", "lstcong80"), labels = c("80% inkongruent", "20% inkongruent"))
+ERR_MEANS$Blocktype<-factor(ERR_MEANS$Blocktype, levels = c("lstcong20", "lstcong80"), labels = c("80% Konfliktanteil", "20% Konfliktanteil"))
 ERR_MEANS$Kongruenz <-factor(ERR_MEANS$congruency, levels = c("cong", "incong"), labels = c("Kongr.", "Inkongr."))
 
 ERR_MEANS$Mean <-ERR_MEANS$Mean*100
